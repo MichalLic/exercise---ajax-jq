@@ -1,0 +1,39 @@
+button {
+    padding: 2px 10px;
+    border: 1px solid #000;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.btn-remove {
+    background-color: indianred;
+    color: #fff;
+}
+
+.btn-edit {
+    background-color: lightskyblue;
+}
+
+.edit .btn-edit {
+    border: groove cornflowerblue;
+}
+
+.btn-save {
+    background-color: limegreen;
+    display: none;
+}
+
+.show .btn-save {
+    display: inline-block;
+}
+
+.btn-delete {
+    clear: both;
+    #delete {
+        border: 1px solid;
+        background-color: gold;
+        font-weight: bold;
+        padding: 3px 10px;
+    }
+}
+

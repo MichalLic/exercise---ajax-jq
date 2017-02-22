@@ -64,7 +64,7 @@ var App = {
     //function
     getUsers: function () {
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com' + '/users',
+            url: 'https://jsonplaceholder.typicode.com/users',
             method: 'GET',
             success: function (data) {
                 App.drawUsers(data);
@@ -99,9 +99,9 @@ var App = {
         block += "<div class='input-box'><input type='text' name='city' disabled value='" + data.address.city + "'/></div>";
         block += "<div class='input-box'><input type='text' name='phone' disabled value='" + data.phone + "'/></div>";
         block += "</div>";
-        block += '<button class="button" onclick="App.removeUser(' + data.id + ', event.target)">Remove</button>';
-        block += '<button class="button-edit" onclick="App.editUser(event.target)">Edit</button>';
-        block += '<button class="button-save" onclick="App.sendChange(' + data.id + ', event.target)">Save</button>';
+        block += '<button class="btn-remove" onclick="App.removeUser(' + data.id + ', event.target)">Remove</button>';
+        block += '<button class="btn-edit" onclick="App.editUser(event.target)">Edit</button>';
+        block += '<button class="btn-save" onclick="App.sendChange(' + data.id + ', event.target)">Save</button>';
         block += '</div>';
         return block;
     },
@@ -154,8 +154,7 @@ var App = {
             var confirmation = confirm("Are you sure to delete?");
             if (confirmation) {
                 $(".new-user").remove();
-            }
-            else {
+            } else {
                 return false;
             }
         });
@@ -295,7 +294,7 @@ var App = {
 
         if (!$name.val().match(App.MIN_INPUT.pattern) || $name.val().length == 0) {
             $name.siblings(".error-chars").addClass("active");
-            console.log($name.length);
+            //App.throwMessage($name, App.MIN_INPUT.errorMessage);
             $name.focus();
             return false;
         }

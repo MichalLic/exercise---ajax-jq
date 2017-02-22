@@ -1,0 +1,32 @@
+#modal {
+    visibility: hidden;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    background-color: rgba(253, 252, 252, .7);
+    z-index: 9999;
+    &.show {
+        visibility: visible;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.modal-in {
+    background-color: #d3d3d3;
+    position: relative;
+    width: 250px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 30px;
+    .close {
+        position: absolute;
+        top: 1px;
+        right: 5px;
+        text-decoration: underline;
+        font-size: 13px;
+        cursor: pointer;
+    }
+}
