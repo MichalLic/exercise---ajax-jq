@@ -17,21 +17,20 @@ var App = {
     ID_LAST_USER: 0,
     MIN_INPUT: {
         pattern: /[a-zA-Z]{3,}/,
-        errorMessage: "Please enter minimum 3 chars!"
+        typeError: ".error-chars"
     },
     ZIP_CODE_INPUT: {
         pattern: /([0-9]{2}[-/s][0-9]{3})/,
-        errorMessage: "Please enter correctly Zip-Code"
+        typeError: ".error-zipcode"
     },
     PHONE_INPUT: {
         pattern: /([0-9])\w/,
-        errorMessage: "Please enter correctly Phone"
+        typeError: ".error-phone"
     },
     EMAIL_INPUT: {
         pattern: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/,
-        errorMessage: "Please enter correctly Email"
+        typeError: ".error-email"
     },
-
 
     //init
     init: function () {
@@ -53,13 +52,13 @@ var App = {
 
     checkFocusOut: function () {
         console.log("validate inputs");
-        App.focusValidName("#name", App.MIN_INPUT);
-        App.focusValidStreet("#street", App.MIN_INPUT);
-        App.focusValidCity("#city", App.MIN_INPUT);
-        App.focusValidSuite("#suite", App.MIN_INPUT);
-        App.focusValidZipcode("#zip-code", App.ZIP_CODE_INPUT);
-        App.focusValidPhone("#phone", App.PHONE_INPUT);
-        App.focusValidEmail("#email", App.EMAIL_INPUT);
+        App.focusValid("#name", App.MIN_INPUT);
+        App.focusValid("#street", App.MIN_INPUT);
+        App.focusValid("#city", App.MIN_INPUT);
+        App.focusValid("#suite", App.MIN_INPUT);
+        App.focusValid("#zip-code", App.ZIP_CODE_INPUT);
+        App.focusValid("#phone", App.PHONE_INPUT);
+        App.focusValid("#email", App.EMAIL_INPUT);
     },
     //function
     getUsers: function () {
@@ -128,7 +127,7 @@ var App = {
     sendChange: function (buttonId, e) {
         console.log("aaaaa");
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com' + '/users/' + buttonId,
+            url: 'https://jsonplaceholder.typicode.com/users/' + buttonId,
             method: 'PUT',
             data: {
                 name: $(e).closest(".new-user").find(".input-box > input[name=name]").val(),
@@ -160,20 +159,21 @@ var App = {
         });
     },
 
-    throwMessage: function (element, errorMessage) {
-        console.log(element);
-        $('<div class="message">' + errorMessage.errorMessage + '</div>').insertAfter(element);
-        console.log(errorMessage);
+    throwMessage: function (element, type) {
+        //console.log(element);
+        //$('<div class="message">' + errorMessage.errorMessage + '</div>').insertAfter(element);
+        //console.log(errorMessage);
+        $(element).siblings(type).addClass("active");
     },
 
-    destroyMessage: function (element) {
+    destroyMessage: function (element, type) {
         console.log(element);
-        $(element).siblings(".message").remove();
+        $(element).siblings(type).removeClass("active");
     },
 
     // input = "#name";
     // alert = /[a-zA-Z]{3,}/  &  "please enter 3 chars"
-    focusValidName: function (input, alert) {
+    focusValid: function (input, alert) {
         $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
             console.log(input);
             console.log(alert);
@@ -185,96 +185,96 @@ var App = {
                 console.log(e.target);
                 return false;
             } else {
-                App.destroyMessage(e.target);
+                App.destroyMessage(e.target, alert);
             }
         });
     },
 
-    focusValidStreet: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var street = $('input[name=street]').val();
-            //var min_input = /[a-zA-Z]{3,}/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                //$('p.street').html('please complete correctly <span>Street</span>');
-                App.throwMessage(e.target, alert);
-                console.log(e.target);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
-
-    focusValidCity: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var city = $('input[name=city]').val();
-            //var min_input = /[a-zA-Z]{3,}/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                App.throwMessage(e.target, alert);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
-
-    focusValidSuite: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var suite = $('input[name=suite]').val();
-            //var min_input = /[a-zA-Z]{3,}/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                //$('p.suite').html('please complete correctly <span>Suite</span>');
-                App.throwMessage(e.target, alert);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
-
-    focusValidZipcode: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var zipcode = $('input[name=zip-code]').val();
-            //var zipcode_regex = /([0-9]{2}[-/s][0-9]{3})/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                App.throwMessage(e.target, alert);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
-
-    focusValidPhone: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var phone = $('input[name=phone]').val();
-            //var phone_regex = /([0-9])\w/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length != 9) {
-                App.throwMessage(e.target, alert);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
-    focusValidEmail: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            //var email = $('input[name=email]').val();
-            //var email_regex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                App.throwMessage(e.target, alert);
-                return false;
-            } else {
-                App.destroyMessage(e.target);
-            }
-        });
-    },
+    //focusValidStreet: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var street = $('input[name=street]').val();
+    //        //var min_input = /[a-zA-Z]{3,}/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length == 0) {
+    //            //$('p.street').html('please complete correctly <span>Street</span>');
+    //            App.throwMessage(e.target, alert);
+    //            console.log(e.target);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
+    //
+    //focusValidCity: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var city = $('input[name=city]').val();
+    //        //var min_input = /[a-zA-Z]{3,}/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length == 0) {
+    //            App.throwMessage(e.target, alert);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
+    //
+    //focusValidSuite: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var suite = $('input[name=suite]').val();
+    //        //var min_input = /[a-zA-Z]{3,}/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length == 0) {
+    //            //$('p.suite').html('please complete correctly <span>Suite</span>');
+    //            App.throwMessage(e.target, alert);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
+    //
+    //focusValidZipcode: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var zipcode = $('input[name=zip-code]').val();
+    //        //var zipcode_regex = /([0-9]{2}[-/s][0-9]{3})/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length == 0) {
+    //            App.throwMessage(e.target, alert);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
+    //
+    //focusValidPhone: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var phone = $('input[name=phone]').val();
+    //        //var phone_regex = /([0-9])\w/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length != 9) {
+    //            App.throwMessage(e.target, alert);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
+    //focusValidEmail: function (input, alert) {
+    //    $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
+    //        //var email = $('input[name=email]').val();
+    //        //var email_regex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+    //        var name = $(input).val();
+    //        if (!name.match(alert.pattern) || name.length == 0) {
+    //            App.throwMessage(e.target, alert);
+    //            return false;
+    //        } else {
+    //            App.destroyMessage(e.target);
+    //        }
+    //    });
+    //},
 
     formValid: function () {
         //get input
@@ -293,39 +293,45 @@ var App = {
         //var min_input = /[a-zA-Z]{3,}/;
 
         if (!$name.val().match(App.MIN_INPUT.pattern) || $name.val().length == 0) {
-            $name.siblings(".error-chars").addClass("active");
-            //App.throwMessage($name, App.MIN_INPUT.errorMessage);
+            //$name.siblings(".error-chars").addClass("active");
+            App.throwMessage($name, ".error-chars");
             $name.focus();
             return false;
         }
         else if (!$street.val().match(App.MIN_INPUT.pattern) || $street.val().length == 0) {
-            $street.siblings(".error-chars").addClass("active");
+            //$street.siblings(".error-chars").addClass("active");
+            App.throwMessage($street, ".error-chars");
             console.log("error street");
             $street.focus();
             return false;
         }
         else if (!$city.val().match(App.MIN_INPUT.pattern) || $city.val().length == 0) {
-            $city.siblings(".error-chars").addClass("active");
+            //$city.siblings(".error-chars").addClass("active");
+            App.throwMessage($city, ".error-chars");
             $city.focus();
             return false;
         }
         else if (!$suite.val().match(App.MIN_INPUT.pattern) || $suite.val().length == 0) {
-            $suite.siblings(".error-chars").addClass("active");
+            //$suite.siblings(".error-chars").addClass("active");
+            App.throwMessage($suite, ".error-chars");
             $suite.focus();
             return false;
         }
         else if (!$zipcode.val().match(App.ZIP_CODE_INPUT.pattern) || $zipcode.val().length == 0) {
-            $zipcode.siblings(".error-zipcode").addClass("active");
+            //$zipcode.siblings(".error-zipcode").addClass("active");
+            App.throwMessage($zipcode, ".error-zipcode");
             $zipcode.focus();
             return false;
         }
         else if (!$phone.val().match(App.PHONE_INPUT.pattern) || $phone.val().length != 9) {
-            $phone.siblings(".error-phone").addClass("active");
+            //$phone.siblings(".error-phone").addClass("active");
+            App.throwMessage($phone, ".error-phone");
             $phone.focus();
             return false;
         }
         else if (!$email.val().match(App.EMAIL_INPUT.pattern) || $email.val().length == 0) {
-            $email.siblings(".error-email").addClass("active");
+            //$email.siblings(".error-email").addClass("active");
+            App.throwMessage($email, ".error-email");
             $email.focus();
             return false;
         }
