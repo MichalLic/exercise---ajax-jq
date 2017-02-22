@@ -12,13 +12,13 @@ form {
     }
     input {
         border: none;
-        border-bottom: 1px solid slategrey;
+        border-bottom: 1px solid $color-grey;
         margin-top: 10px;
         padding-bottom: 10px;
         &:focus {
             outline: none;
             border-width: 2px;
-            border-color: seagreen;
+            border-color: $color-lightgreen;
         }
     }
 }
@@ -29,10 +29,10 @@ form {
     padding: 5px;
     border: 1px solid transparent;
     background-color: transparent;
-    color: #000000;
+    color: $color-black;
 }
 
 .edit .input-box input {
-    background-color: ghostwhite;
-    border: 1px solid #027353;
+    background-color: $color-white-secondary;
+    border: 1px solid $color-green;
 }
