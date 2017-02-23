@@ -89,11 +89,21 @@ var App = {
     },
 
     //function
+    activePreloader: function () {
+      $(".loader").addClass("activeLoader");
+    },
+
+    inactivePreloader: function () {
+      $(".loader").removeClass("activeLoader");
+    },
+
     getUsers: function () {
+        App.activePreloader();
         $.ajax({
             url: App.URL,
             method: 'GET',
             success: function (data) {
+                App.inactivePreloader();
                 App.drawUsers(data);
             },
             error: function () {
