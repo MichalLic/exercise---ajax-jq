@@ -4,16 +4,25 @@
 
 var App = {
     //variables
-    USERS_LIST: "users-list", //$USERS_LIST
-    //BUTTON: "button",
     CLICK_EVENT: "click",
     FOCUSOUT_EVENT: "focusout",
-    FORM_ID: "user-form",
-    MODAL_ID: "modal",
-    SUBMIT_BUTTON: "submit",
-    EDIT_BUTTON: "button-edit",
-    DELETE_BUTTON: "delete",
+    FORM_ID: "#user-form",
+    USERS_LIST_CL: ".users-list",
+    NEW_USER_CL: ".new-user",
+    MODAL_ID: "#modal",
+    SUBMIT_BUTTON_ID: "#submit",
+    DELETE_BUTTON_ID: "#delete",
     ID_LAST_USER: 0,
+    URL: 'https://jsonplaceholder.typicode.com/users/',
+    FORM_INPUT_ID: {
+        name: '#name',
+        street: '#street',
+        city: '#city',
+        suite: '#suite',
+        zipCode: '#zip-code',
+        phone: '#phone',
+        email: '#email'
+    },
     MIN_INPUT: {
         pattern: /[a-zA-Z]{3,}/,
         typeError: ".error-chars"
@@ -41,7 +50,7 @@ var App = {
     },
 
     initAddNew: function () {
-        $("#" + App.SUBMIT_BUTTON).on(App.CLICK_EVENT, function (event) {
+        $(App.SUBMIT_BUTTON_ID).on(App.CLICK_EVENT, function (event) {
             event.preventDefault();
             App.formValid();
             console.log("correct");
@@ -50,40 +59,63 @@ var App = {
 
     checkFocusOut: function () {
         console.log("validate inputs");
-        App.focusValid("#name", App.MIN_INPUT);
-        App.focusValid("#street", App.MIN_INPUT);
-        App.focusValid("#city", App.MIN_INPUT);
-        App.focusValid("#suite", App.MIN_INPUT);
-        App.focusValid("#zip-code", App.ZIP_CODE_INPUT);
-        App.focusValid("#phone", App.PHONE_INPUT);
-        App.focusValid("#email", App.EMAIL_INPUT);
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.name).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.name, App.MIN_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.street).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.street, App.MIN_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.city).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.city, App.MIN_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.suite).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.suite, App.MIN_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.zipCode).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.zipCode, App.ZIP_CODE_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.phone).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.phone, App.PHONE_INPUT);
+        });
+
+        $(App.FORM_ID + " " + App.FORM_INPUT_ID.email).on(App.FOCUSOUT_EVENT, function () {
+            App.focusValid(App.FORM_INPUT_ID.email, App.EMAIL_INPUT);
+        });
     },
+
     //function
     getUsers: function () {
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com/users',
+            url: App.URL,
             method: 'GET',
             success: function (data) {
                 App.drawUsers(data);
             },
             error: function () {
-                console.log("getting data error");
+                console.log("Getting data error");
             }
         });
     },
+
     resetForm: function () {
         var resetIt = function () {
-            $("#" + App.FORM_ID)[0].reset();
+            $(App.FORM_ID)[0].reset();
         };
         setTimeout(resetIt, 3000);
     },
+
     drawUsers: function (data) {
         var template = "";
         $.each(data, function (index, item) {
             template += App.getUserBlock(item);
             App.ID_LAST_USER++;
         });
-        $("." + App.USERS_LIST).prepend(template);
+        $(App.USERS_LIST_CL).prepend(template);
         App.editUser();
     },
 
@@ -103,9 +135,10 @@ var App = {
         return block;
     },
 
+    //remove single user block
     removeUser: function (itemId, e) {
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com/users/' + itemId,
+            url: App.URL + itemId,
             dataType: 'json',
             contentType: 'application/json',
             data: {'action': 'delete'},
@@ -116,27 +149,28 @@ var App = {
         });
     },
 
+    //exchange attribute of input (disable true/false)
     editUser: function (e) {
-        var element = $(e).closest(".new-user");
+        var element = $(e).closest(App.NEW_USER_CL);
         element.addClass("edit show");
         element.find(".input-box > input").prop("disabled", false)
     },
 
+    //confirm change data user
     sendChange: function (buttonId, e) {
-        console.log("aaaaa");
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com/users/' + buttonId,
+            url: App.URL + buttonId,
             method: 'PUT',
             data: {
-                name: $(e).closest(".new-user").find(".input-box > input[name=name]").val(),
-                street: $(e).closest(".new-user").find(".input-box > input[name=street]").val(),
-                city: $(e).closest(".new-user").find(".input-box > input[name=city]").val(),
-                phone: $(e).closest(".new-user").find(".input-box > input[name=phone]").val()
+                name: $(e).closest(App.NEW_USER_CL).find(".input-box > input[name=name]").val(),
+                street: $(e).closest(App.NEW_USER_CL).find(".input-box > input[name=street]").val(),
+                city: $(e).closest(App.NEW_USER_CL).find(".input-box > input[name=city]").val(),
+                phone: $(e).closest(App.NEW_USER_CL).find(".input-box > input[name=phone]").val()
             },
             success: function (data) {
                 console.log(data);
                 console.log(e);
-                var element = $(e).closest(".new-user");
+                var element = $(e).closest(App.NEW_USER_CL);
                 element.find(".input-box > input").prop("disabled", true);
                 element.removeClass("edit show");
             },
@@ -146,104 +180,62 @@ var App = {
         });
     },
 
+    //remove all users blocks
     deleteAll: function () {
-        $("#" + App.DELETE_BUTTON).on(App.CLICK_EVENT, function () {
+        $(App.DELETE_BUTTON_ID).on(App.CLICK_EVENT, function () {
             var confirmation = confirm("Are you sure to delete?");
             if (confirmation) {
-                $(".new-user").remove();
+                $(App.NEW_USER_CL).remove();
             } else {
                 return false;
             }
         });
     },
 
+    //Show under the input error message
     throwMessage: function (element, type) {
-        //console.log(element);
-        //$('<div class="message">' + errorMessage.errorMessage + '</div>').insertAfter(element);
-        //console.log(errorMessage);
         $(element).siblings(type).addClass("active");
     },
 
+    //Hide error message
     destroyMessage: function (element, type) {
-        console.log(element);
         $(element).siblings(type).removeClass("active");
     },
 
     // input = "#name";
     // alert = /[a-zA-Z]{3,}/  &  "please enter 3 chars"
     focusValid: function (input, alert) {
-        $('#' + App.FORM_ID + " " + input).on(App.FOCUSOUT_EVENT, function (e) {
-            console.log(input);
-            console.log(alert);
-            var name = $(input).val();
-            if (!name.match(alert.pattern) || name.length == 0) {
-                App.throwMessage(e.target, alert);
-                console.log(e.target);
-                return false;
-            } else {
-                App.destroyMessage(e.target, alert);
-            }
-        });
-    },
-
-    formValid: function () {
-        //get input
-        var $name = $('#user-form input[name=name]');
-        var $street = $('#user-form input[name=street]');
-        var $email = $('#user-form input[name=email]');
-        var $city = $('#user-form input[name=city]');
-        var $suite = $('#user-form input[name=suite]');
-        var $zipcode = $('#user-form input[name=zip-code]');
-        var $phone = $('#user-form input[name=phone]');
-
-        if (!$name.val().match(App.MIN_INPUT.pattern) || $name.val().length == 0) {
-            App.throwMessage($name, App.MIN_INPUT.typeError);
-            $name.focus();
+        console.log(input);
+        console.log(alert);
+        var name = $(input).val();
+        if (!name.match(alert.pattern) || name.length == 0) {
+            App.throwMessage(input, alert);
             return false;
-        }
-        else if (!$street.val().match(App.MIN_INPUT.pattern) || $street.val().length == 0) {
-            App.throwMessage($street, App.MIN_INPUT.typeError);
-            console.log("error street");
-            $street.focus();
-            return false;
-        }
-        else if (!$city.val().match(App.MIN_INPUT.pattern) || $city.val().length == 0) {
-            App.throwMessage($city, App.MIN_INPUT.typeError);
-            $city.focus();
-            return false;
-        }
-        else if (!$suite.val().match(App.MIN_INPUT.pattern) || $suite.val().length == 0) {
-            App.throwMessage($suite, App.MIN_INPUT.typeError);
-            $suite.focus();
-            return false;
-        }
-        else if (!$zipcode.val().match(App.ZIP_CODE_INPUT.pattern) || $zipcode.val().length == 0) {
-            App.throwMessage($zipcode, App.ZIP_CODE_INPUT.typeError);
-            $zipcode.focus();
-            return false;
-        }
-        else if (!$phone.val().match(App.PHONE_INPUT.pattern) || $phone.val().length != 9) {
-            App.throwMessage($phone, App.PHONE_INPUT.typeError);
-            $phone.focus();
-            return false;
-        }
-        else if (!$email.val().match(App.EMAIL_INPUT.pattern) || $email.val().length == 0) {
-            App.throwMessage($email, App.EMAIL_INPUT.typeError);
-            $email.focus();
-            return false;
-        }
-        else {
-            App.showModal();
-            //alert("Submitted correctly finished");
+        } else {
+            App.destroyMessage(input, alert);
             return true;
         }
     },
-    showModal: function () {
-        $("#" + App.MODAL_ID).addClass("show");
+
+    formValid: function () {
+        if (App.focusValid(App.FORM_INPUT_ID.name, App.MIN_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.street, App.MIN_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.city, App.MIN_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.suite, App.MIN_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.zipCode, App.ZIP_CODE_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.phone, App.PHONE_INPUT) ||
+            App.focusValid(App.FORM_INPUT_ID.email, App.EMAIL_INPUT)) {
+            App.showModal();
+        }
     },
+
+    showModal: function () {
+        $(App.MODAL_ID).addClass("show");
+    },
+
     closeModal: function () {
         $(".close").on("click", function () {
-            $("#" + App.MODAL_ID).removeClass("show");
+            $(App.MODAL_ID).removeClass("show");
             App.addNew();
             App.resetForm();
         });
@@ -251,7 +243,6 @@ var App = {
 
     addNew: function () {
         App.ID_LAST_USER++;
-
         var user = {
             id: App.ID_LAST_USER,
             name: $('#name').val(),
@@ -267,10 +258,10 @@ var App = {
         $.ajax({
             type: "POST",
             dataType: 'json',
-            url: 'https://jsonplaceholder.typicode.com' + '/users',
+            url: App.URL,
             data: user,
             success: function (data) {
-                $(".users-list").append(App.getUserBlock(user));
+                $(App.USERS_LIST_CL).append(App.getUserBlock(user));
                 console.log(data);
             }
         });
