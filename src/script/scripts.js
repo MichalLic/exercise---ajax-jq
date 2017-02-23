@@ -130,8 +130,10 @@ var App = {
         block += "</div>";
         block += '<button class="btn-remove" onclick="App.removeUser(' + data.id + ', event.target)">Remove</button>';
         block += '<button class="btn-edit" onclick="App.editUser(event.target)">Edit</button>';
+        block += '<button class="btn-cancel" onclick="App.cancelAction(event.target)">Cancel</button>';
         block += '<button class="btn-save" onclick="App.sendChange(' + data.id + ', event.target)">Save</button>';
         block += '</div>';
+        console.log(event.target);
         return block;
     },
 
@@ -152,8 +154,14 @@ var App = {
     //exchange attribute of input (disable true/false)
     editUser: function (e) {
         var element = $(e).closest(App.NEW_USER_CL);
-        element.addClass("edit show");
-        element.find(".input-box > input").prop("disabled", false)
+        element.addClass("edit show cancel");
+        element.find(".input-box > input").prop("disabled", false);
+    },
+
+    cancelAction: function (e) {
+        var element = $(e).closest(App.NEW_USER_CL);
+        element.removeClass("edit show cancel");
+        element.find(".input-box > input").prop("disabled", true);
     },
 
     //confirm change data user
@@ -172,7 +180,7 @@ var App = {
                 console.log(e);
                 var element = $(e).closest(App.NEW_USER_CL);
                 element.find(".input-box > input").prop("disabled", true);
-                element.removeClass("edit show");
+                element.removeClass("edit show cancel");
             },
             error: function () {
                 console.log("%c Sending data error", "background-color: red; color: #fff");

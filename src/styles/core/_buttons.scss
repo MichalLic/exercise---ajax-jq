@@ -1,39 +1,76 @@
 button {
-    padding: 2px 10px;
+    padding: 5px 15px;
     border: 1px solid $color-black;
+    border-radius: 3px;
     margin: 0 5px;
     cursor: pointer;
+    color: $color-white;
 }
 
 .btn-remove {
     background-color: $color-danger;
-    color: $color-white;
+    border-color: $color-red;
+
+    &:hover {
+        background-color: $color-redbrick;
+    }
 }
 
 .btn-edit {
     background-color: $color-blue;
+    &:hover {
+        background-color: $color-dark-blue;
+    }
+
 }
 
 .edit .btn-edit {
-    border: groove $color-dark-blue;
+    background-color: $color-dark-blue;
+}
+
+#submit {
+    background-color: $color-lightgrey;
+    border: 1px solid $color-grey;
+    margin-left: 20px;
+    color: $color-black;
+    &:hover {
+        background-color: $color-grey;
+    }
+}
+
+.btn-cancel {
+    display: none;
+}
+
+.cancel .btn-cancel {
+    display: inline-block;
+    float: right;
+    background-color: $color-orange;
+    border: $color-orange-hover;
+    &:hover{
+        background-color: $color-orange-hover;
+    }
 }
 
 .btn-save {
-    background-color: $color-success;
     display: none;
 }
 
 .show .btn-save {
     display: inline-block;
+    float: right;
+    background-color: $color-success;
+    border: $color-success-hover;
+    &:hover {
+    background-color: $color-success-hover;
+}
 }
 
 .btn-delete {
     clear: both;
     #delete {
-        border: 1px solid;
-        background-color: $color-gold;
+        background-color: #633606;
         font-weight: bold;
-        padding: 3px 10px;
     }
 }
 

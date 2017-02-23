@@ -4,7 +4,8 @@
 }
 
 .new-user {
-    background-color: rgba(226, 245, 169, 1);
+    background-color: $color-lightgrey;
+    border: 1px solid $color-grey;
     padding: 10px;
     margin: 10px 0;
 
