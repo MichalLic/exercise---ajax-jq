@@ -247,10 +247,13 @@ var App = {
     },
 
     closeModal: function () {
-        $(".close").on("click", function () {
-            $(App.MODAL_ID).removeClass("show");
-            App.addNew();
-            App.resetForm();
+        $(".close, #modal").on("click", function (e) {
+            console.log(e.target);
+            if(!$(e.target).hasClass("modal-in")) {
+                $(App.MODAL_ID).removeClass("show");
+                App.addNew();
+                App.resetForm();
+            }
         });
     },
 
