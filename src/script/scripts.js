@@ -93,6 +93,7 @@ var App = {
 
     inactivePreloader: function () {
       $(".loader").removeClass("activeLoader");
+      $("#svg").css("display", "none");
     },
 
     getUsers: function () {
