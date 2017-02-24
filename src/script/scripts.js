@@ -53,12 +53,10 @@ var App = {
         $(App.SUBMIT_BUTTON_ID).on(App.CLICK_EVENT, function (event) {
             event.preventDefault();
             App.formValid();
-            console.log("correct");
         });
     },
 
     checkFocusOut: function () {
-        console.log("validate inputs");
         $(App.FORM_ID + " " + App.FORM_INPUT_ID.name).on(App.FOCUSOUT_EVENT, function () {
             App.focusValid(App.FORM_INPUT_ID.name, App.MIN_INPUT);
         });
@@ -103,6 +101,7 @@ var App = {
             url: App.URL,
             method: 'GET',
             success: function (data) {
+                console.log(data);
                 App.inactivePreloader();
                 App.drawUsers(data);
             },
@@ -143,7 +142,6 @@ var App = {
         block += '<button class="btn-cancel" onclick="App.cancelAction(event.target)">Cancel</button>';
         block += '<button class="btn-save" onclick="App.sendChange(' + data.id + ', event.target)">Save</button>';
         block += '</div>';
-        console.log(event.target);
         return block;
     },
 
@@ -187,7 +185,6 @@ var App = {
             },
             success: function (data) {
                 console.log(data);
-                console.log(e);
                 var element = $(e).closest(App.NEW_USER_CL);
                 element.find(".input-box > input").prop("disabled", true);
                 element.removeClass("edit show cancel");
@@ -199,7 +196,7 @@ var App = {
     },
 
     //remove all users blocks
-    deleteAll: function () {
+        deleteAll: function () {
         $(App.DELETE_BUTTON_ID).on(App.CLICK_EVENT, function () {
             var confirmation = confirm("Are you sure to delete?");
             if (confirmation) {
@@ -223,8 +220,6 @@ var App = {
     // input = "#name";
     // alert = /[a-zA-Z]{3,}/  &  "please enter 3 chars"
     focusValid: function (input, alert) {
-        console.log(input);
-        console.log(alert);
         var name = $(input).val();
         if (!name.match(alert.pattern) || name.length == 0) {
             App.throwMessage(input, alert);

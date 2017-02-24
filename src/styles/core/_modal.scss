@@ -5,26 +5,29 @@
     top: 0;
     bottom: 0;
     position: fixed;
-    background-color: rgba(253, 252, 252, .7);
+    background-color: rgba(0,0,0,.7);
     z-index: 9999;
     &.show {
         visibility: visible;
         display: flex;
         justify-content: center;
         align-items: center;
-    }
+}
 }
 .modal-in {
-    background-color: $color-lightgrey;
+    background-color: $color-white;
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    border: 1px solid black;
     position: relative;
-    width: 250px;
+    width: 290px;
     text-align: center;
     white-space: nowrap;
     padding: 30px;
+    font-family: 'Roboto', sans-serif ;
     .close {
         position: absolute;
-        top: 1px;
-        right: 5px;
+        top: 5px;
+        right: 8px;
         text-decoration: underline;
         font-size: 13px;
         cursor: pointer;
